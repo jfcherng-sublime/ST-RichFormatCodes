@@ -1,0 +1,6 @@
+[
+	{
+		"caption": "RichFormatCodes: Copy Rich Codes",
+		"command": "rfc_copy_rich_codes"
+	}
+]

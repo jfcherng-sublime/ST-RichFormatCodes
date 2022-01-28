@@ -1,0 +1,10 @@
+.dependabot export-ignore
+.editorconfig export-ignore
+.gitattributes export-ignore
+.github/ export-ignore
+.gitignore export-ignore
+codecov.yml export-ignore
+pyproject.toml export-ignore
+tests/ export-ignore
+tox.ini export-ignore
+unittesting.json export-ignore
