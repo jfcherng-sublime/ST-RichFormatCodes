@@ -54,18 +54,15 @@ class RfcCopyRichCodesCommand(sublime_plugin.TextCommand):
         return self._fix_html(html)
 
     def _fix_html(self, html: str) -> str:
-        # find background color (works in most situations...)
-        matches = re.search(r"background-color:([^\"';]+)", html, re.IGNORECASE)
-        bgcolor = matches.group(1) if matches else "inherit"
         # table can be copied to Word, PowerPoint while keeping the background color
         html = f"<table><tr><td>{html}</td></tr></table>"
         # fixes many pasting issues in Microsoft Word... don't ask me why it works ¯\_(ツ)_/¯
         html = f'<br style="line-height:0">{html}'
 
-        style = f"<style>{self._css(bgcolor)}</style>"
+        style = f"<style>{self._css()}</style>"
         return f'<html><head><meta charset="utf-8">{style}</head><body>{html}</body></html>'
 
-    def _css(self, bgcolor: str) -> str:
+    def _css(self) -> str:
         css = """
         body {
             background-color: ${bgcolor};
@@ -76,4 +73,5 @@ class RfcCopyRichCodesCommand(sublime_plugin.TextCommand):
             background-color: ${bgcolor};
         }
         """
+        bgcolor = self.view.style().get("background", "inherit")
         return re.sub(r"\s+", "", string.Template(css).substitute(bgcolor=bgcolor))
