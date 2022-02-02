@@ -4,5 +4,4 @@ This package can copy your codes in rich HTML format, which can be paste into ot
 
 ## Usage
 
-- From the command palette, find commands begin with `RichFormatCodes`
-- Or, find `RichFormatCodes` in the right click context menu
+- From the command palette, find commands begin with `RichFormatCodes: Copy Rich Codes`
