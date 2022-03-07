@@ -1,0 +1,10 @@
+[
+    {
+        "caption": "-",
+        "id": "clipboard"
+    },
+    {
+        "caption": "Copy Rich Codes",
+        "command": "rfc_copy_rich_codes"
+    }
+]
