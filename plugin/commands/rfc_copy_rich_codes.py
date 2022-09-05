@@ -1,9 +1,9 @@
 import os
-import re
 import string
 import subprocess
 import sys
 import tempfile
+import textwrap
 from typing import IO
 
 import sublime
@@ -13,6 +13,10 @@ SYS_PLATFORM = sys.platform
 
 if SYS_PLATFORM == "win32":
     from ..libs import winclip
+
+
+def reformat(text: str) -> str:
+    return textwrap.dedent(text).rstrip()
 
 
 class RfcCopyRichCodesCommand(sublime_plugin.TextCommand):
@@ -51,7 +55,7 @@ class RfcCopyRichCodesCommand(sublime_plugin.TextCommand):
             if self.view.has_non_empty_selection_region()
             else (sublime.Region(0, self.view.size()),)
         )
-        html = self.view.export_to_html(regions=input_regions, minihtml=False, enclosing_tags=True)
+        html = self.view.export_to_html(regions=input_regions, minihtml=True, enclosing_tags=True)
         return self._fix_html(html)
 
     def _fix_html(self, html: str) -> str:
@@ -64,15 +68,17 @@ class RfcCopyRichCodesCommand(sublime_plugin.TextCommand):
         return f'<html><head><meta charset="utf-8">{style}</head><body>{html}</body></html>'
 
     def _css(self) -> str:
-        css = """
-        body {
-            background-color: ${bgcolor};
-            padding: 1rem;
-            margin: 0;
-        }
-        table {
-            background-color: ${bgcolor};
-        }
-        """
+        css = reformat(
+            """
+            body {
+                background-color: ${bgcolor};
+                padding: 1rem;
+                margin: 0;
+            }
+            table {
+                background-color: ${bgcolor};
+            }
+            """
+        )
         bgcolor = self.view.style().get("background", "inherit")
-        return re.sub(r"\s+", "", string.Template(css).substitute(bgcolor=bgcolor))
+        return string.Template(css).substitute(bgcolor=bgcolor)
