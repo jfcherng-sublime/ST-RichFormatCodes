@@ -1,12 +1,13 @@
-from typing import IO
 import os
 import re
 import string
-import sublime
-import sublime_plugin
 import subprocess
 import sys
 import tempfile
+from typing import IO
+
+import sublime
+import sublime_plugin
 
 SYS_PLATFORM = sys.platform
 
