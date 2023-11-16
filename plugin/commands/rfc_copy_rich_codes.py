@@ -70,8 +70,7 @@ class RfcCopyRichCodesCommand(sublime_plugin.TextCommand):
         return f'<html><head><meta charset="utf-8">{style}</head><body>{html}</body></html>'
 
     def _css(self) -> str:
-        css = reformat(
-            """
+        css = reformat("""
             body {
                 background-color: ${bgcolor};
                 padding: 1rem;
@@ -80,7 +79,6 @@ class RfcCopyRichCodesCommand(sublime_plugin.TextCommand):
             table {
                 background-color: ${bgcolor};
             }
-            """
-        )
+        """)
         bgcolor = self.view.style().get("background", "inherit")
         return string.Template(css).substitute(bgcolor=bgcolor)
