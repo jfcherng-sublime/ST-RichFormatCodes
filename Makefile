@@ -1,26 +1,51 @@
 .PHONY: all
 all:
 
-.PHONY: install
-install: pip-compile
-	python -m uv pip install -r requirements.txt
+# ---- #
+# deps #
+# ---- #
 
-.PHONY: pip-compile
-pip-compile:
-	python -m uv pip compile requirements.in -o requirements.txt
+.PHONY: install-all
+install-all:
+	uv sync --all-groups
+
+.PHONY: install
+install:
+	uv sync --no-dev
+
+.PHONY: install-dev
+install-dev:
+	uv sync --dev
+
+.PHONY: pip-upgrade
+pip-upgrade:
+	uv sync --all-groups --upgrade
+
+# -- #
+# CI #
+# -- #
+
+ci-base-cmd = uv run --dev
 
 .PHONY: ci-check
 ci-check:
 	@echo "========== check: mypy =========="
-	mypy -p plugin
+	$(ci-base-cmd) mypy -p plugin
 	@echo "========== check: ruff (lint) =========="
-	ruff check --diff .
+	$(ci-base-cmd) ruff check --diff .
 	@echo "========== check: ruff (format) =========="
-	ruff format --diff .
+	$(ci-base-cmd) ruff format --diff .
 
 .PHONY: ci-fix
 ci-fix:
 	@echo "========== fix: ruff (lint) =========="
-	ruff check --fix .
+	$(ci-base-cmd) ruff check --fix .
 	@echo "========== fix: ruff (format) =========="
-	ruff format .
+	$(ci-base-cmd) ruff format .
+
+.PHONY: ci-fix-unsafe
+ci-fix-unsafe:
+	@echo "========== fix: ruff (lint unsafe) =========="
+	$(ci-base-cmd) ruff check --fix --unsafe-fixes .
+	@echo "========== fix: ruff (format) =========="
+	$(ci-base-cmd) ruff format .
